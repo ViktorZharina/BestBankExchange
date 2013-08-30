@@ -1,11 +1,14 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+# @author Viktor Zharina <viktorz1986@gmail.com>
+# CC-BY-SA License
+
 import urllib2
 from banks import *
 import json
 from bs4 import BeautifulSoup
 
-#
+# Описание работы скрипта
 #1.получить обменный курс
 #   1.1 получить исходный код страницы
 #   1.2 распарсить из страницы значения курсов валют

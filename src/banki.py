@@ -6,27 +6,21 @@ import json
 from bs4 import BeautifulSoup
 
 def main():
-    bank_rate = {}
+    bank_rate = get_exchange_rate(banks_info, settings)
+    print (get_currency_table(bank_rate))
+    print get_banks_for_exchange(bank_rate)
 
+def get_exchange_rate(banks_info, settings):
+    bank_rate = {}
     for bank in banks_info:
         source = get_source(bank['url'], bank['encoding'])
         info = (bank['name'] + ' ' + bank['address'] + ' ' + bank['phone'] + ' ')
-        bank_rate[info] = get_exchange_rate(source, bank, settings)
-
-    table = get_currency_table(bank_rate)
-    print (table)
-    banks = get_banks_for_exchange(bank_rate)
-    print banks
-
-def get_source(url, encoding):
-    try:
-        fileHandle = urllib2.urlopen(url)
-        source = fileHandle.read()
-        fileHandle.close()
-    except IOError:
-        print ('Cannot open URL %s for reading' % url)
-        source = u'err'
-    return source.decode(encoding, 'ignore')
+        exchange_rate = {}
+        for c in settings['currencys']:
+            for op in settings['operations']:
+                exchange_rate[c +"_" + op] = get_currency_value(c, op, source, bank)
+                bank_rate[info] = exchange_rate
+    return bank_rate
 
 def get_currency_table(bank_rate):
     s = ""
@@ -40,40 +34,9 @@ def get_currency_table(bank_rate):
 
     return table.encode('utf-8')
 
-def get_exchange_rate(src, bank_params, settings):
-    exchange_rate = {}
-    for c in settings['currencys']:
-        for op in settings['operations']:
-            exchange_rate[c +"_" + op] = get_currency_value(c, op, src, bank_params)
-    return exchange_rate
-
-def get_currency_value(cur, ttype, src, params):
-    if ('method' in params.keys()):
-        if (params['method'] == 'soup'):
-            soup = BeautifulSoup(src)
-            currency_value = soup.find(params[cur + '_ankor'], {'id':params[cur + '_' + ttype + '_offset']}).get_text(strip=True)
-        elif (params['method'] == 'json'):
-            json_data = json.loads(src)
-
-            if (ttype == 'sell'):
-                ##SALE!!!
-                currency_value = json_data['today']['sale'][cur]
-            else:
-                currency_value = json_data['today'][ttype][cur]
-            currency_value = str(currency_value)
-    else:
-        cur_type_offset = params[cur + '_' + ttype + '_offset']
-        ankor_idx = src.find(params[cur + '_ankor'])
-        buy_start = ankor_idx + cur_type_offset
-        currency_value = src[buy_start : buy_start + params['offset']]
-
-    return currency_value.replace(',', '.')
-
 def get_banks_for_exchange(bank_rate):
     all_values = {}
     bank = {}
-
-    #get_all_curency_values
 
     for info in bank_rate:
         for cur_op_name, val in bank_rate[info].items():
@@ -85,9 +48,42 @@ def get_banks_for_exchange(bank_rate):
                 bank[val] = info
 
     best_values = get_best_values(all_values)
-    best_banks = get_banks_by_best_values(best_values, bank)
-    print best_banks
-    return best_banks
+    return get_banks_by_best_values(best_values, bank)
+
+def get_source(url, encoding):
+    try:
+        fileHandle = urllib2.urlopen(url)
+        source = fileHandle.read()
+        fileHandle.close()
+    except IOError:
+        print ('Cannot open URL %s for reading' % url)
+        source = u'err'
+    return source.decode(encoding, 'ignore')
+
+def get_currency_value(cur, ttype, src, params):
+    if ('method' in params.keys()):
+        if (params['method'] == 'soup'):
+            #process_soup
+            soup = BeautifulSoup(src)
+            currency_value = soup.find(params[cur + '_ankor'], {'id':params[cur + '_' + ttype + '_offset']}).get_text(strip=True)
+        elif (params['method'] == 'json'):
+            #process_json
+            json_data = json.loads(src)
+
+            if (ttype == 'sell'):
+                ##SALE!!!
+                currency_value = json_data['today']['sale'][cur]
+            else:
+                currency_value = json_data['today'][ttype][cur]
+            currency_value = str(currency_value)
+    else:
+        #process_by_hand
+        cur_type_offset = params[cur + '_' + ttype + '_offset']
+        ankor_idx = src.find(params[cur + '_ankor'])
+        buy_start = ankor_idx + cur_type_offset
+        currency_value = src[buy_start : buy_start + params['offset']]
+
+    return currency_value.replace(',', '.')
 
 def get_best_values(all_values):
     best_values = {}
@@ -96,9 +92,6 @@ def get_best_values(all_values):
         best_values[cur_op] = max(value_list) if (cur_op[4:] == 'buy') else min(value_list)
 
     return best_values
-
-def must_exchange(best_banks):
-    best_banks
 
 def get_banks_by_best_values(best_values, bank):
 

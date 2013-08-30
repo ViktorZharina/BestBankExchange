@@ -10,8 +10,6 @@ settings = {
     'eur_sell'   : u'EUR продажа'
 }
 
-
-
 banks_info = [
     {
         'url'                   :'http://www.nskbl.ru',

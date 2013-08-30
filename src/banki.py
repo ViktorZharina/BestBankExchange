@@ -7,7 +7,10 @@ import urllib2
 from banks import *
 import json
 from bs4 import BeautifulSoup
+import MySQLdb
+from decimal import *
 
+getcontext().prec = 4
 # Описание работы скрипта
 #1.получить обменный курс
 #   1.1 получить исходный код страницы
@@ -26,8 +29,27 @@ from bs4 import BeautifulSoup
 
 def main():
     bank_rate = get_exchange_rate(banks_info, settings)
+    add_to_mysql(bank_rate)
     print (get_currency_table(bank_rate))
-    print get_banks_for_exchange(bank_rate)
+
+def add_to_mysql(bank_rate):
+    db = MySQLdb.connect(host="localhost", user="root", passwd="ghtdtl", db="banks", charset='utf8')
+    cursor = db.cursor()
+
+    for bank_info, cur_op in bank_rate.items():
+        sql = """INSERT INTO exchange_rate (bank_info, usd_buy, usd_sell, eur_buy, eur_sell)
+        VALUES ('%(bank_info)s', %(usd_buy)f, %(usd_sell)f, %(eur_buy)f, %(eur_sell)f) """ % {
+            "bank_info" : bank_info,
+            "usd_buy"   : Decimal(cur_op['usd_buy']),
+            "usd_sell"  : Decimal(cur_op['usd_sell']),
+            "eur_buy"   : Decimal(cur_op['eur_buy']),
+            "eur_sell"  : Decimal(cur_op['eur_sell']),
+        }
+        cursor.execute(sql)
+
+    db.commit()
+
+    return True
 
 def get_exchange_rate(banks_info, settings):
     bank_rate = {}

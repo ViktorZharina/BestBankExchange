@@ -10,6 +10,16 @@ settings = {
     'eur_sell'   : u'EUR продажа'
 }
 
+url_bank_info = {
+    'http://www.nskbl.ru' : u'Левобережный. Совпаршкольный 13. 900-410. 09.00-20.00',
+    'http://novosibirs.pkb.ru/work/informer/currency.asp?87971' : u'Левобережный. Совпаршкольный 13. 900-410. 09.00-20.00',
+    'http://www.rshb.ru/filiali/55/currency-rates.php' : u'Россельхоз МосковТракт,д.8б 20-22-24',
+    'http://www.skbbank.ru': u'СКБ Томск, пр. Ленина,94 51-18-49',
+    'http://tomsk.rostbank.ru/offices' : u'РОСТ_БАНК ул.Дзержинского,54а 70-50-51',
+    'http://www.bank-kansky.ru': u'Канский пр. Кирова, 35 55-50-90',
+    'https://direct.binbank.ru/api/rate.php?city=Томск&callback=?': u'БинБанк Кирова,3Б 56-40-37'
+}
+
 banks_info = [
     {
         'url'                   :'http://www.nskbl.ru',

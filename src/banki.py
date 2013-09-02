@@ -8,6 +8,7 @@ from banks import *
 import json
 from bs4 import BeautifulSoup
 import MySQLdb
+import memcache
 from decimal import *
 
 getcontext().prec = 4
@@ -28,9 +29,23 @@ getcontext().prec = 4
 
 
 def main():
-    bank_rate = get_exchange_rate(banks_info, settings)
-    add_to_mysql(bank_rate)
-    print (get_currency_table(bank_rate))
+    bank_rate = get_exchange_rate(parse_params, settings)
+    #add_to_mysql(bank_rate)
+    add_to_memcache(bank_rate)
+    #print (get_currency_table(bank_rate))
+
+def add_to_memcache(bank_rate):
+    mc = memcache.Client(['127.0.0.1:11211'], debug=1)
+    mc.set('syn', 1)
+
+    for bank_url, exchange_rate in bank_rate.items():
+        mc.set(bank_url.encode('utf-8'), exchange_rate)
+
+
+    mc.set('syn', 0)
+
+    mc.get('http://www.nskbl.ru')
+    return 1
 
 def add_to_mysql(bank_rate):
     db = MySQLdb.connect(host="localhost", user="root", passwd="ghtdtl", db="banks", charset='utf8')
@@ -51,16 +66,17 @@ def add_to_mysql(bank_rate):
 
     return True
 
-def get_exchange_rate(banks_info, settings):
+def get_exchange_rate(parse_params, settings):
     bank_rate = {}
-    for bank in banks_info:
+
+    for bank in parse_params:
         source = get_source(bank['url'], bank['encoding'])
-        info = (bank['name'] + ' ' + bank['address'] + ' ' + bank['phone'] + ' ')
         exchange_rate = {}
         for c in settings['currencys']:
             for op in settings['operations']:
                 exchange_rate[c +"_" + op] = get_currency_value(c, op, source, bank)
-                bank_rate[info] = exchange_rate
+                bank_rate[url_bank_info[bank['url']]] = exchange_rate
+
     return bank_rate
 
 def get_currency_table(bank_rate):

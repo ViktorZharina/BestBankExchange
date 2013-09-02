@@ -2,31 +2,28 @@
 # -*- coding: utf-8 -*-
 
 settings = {
-    'currencys'  : ['usd', 'eur'],
-    'operations' : ['buy', 'sell'],
-    'usd_buy'    : u'USD покупка',
-    'usd_sell'   : u'USD продажа',
-    'eur_buy'    : u'EUR покупка',
-    'eur_sell'   : u'EUR продажа'
+    'currencys'     : ['usd', 'eur'],
+    'operations'    : ['buy', 'sell'],
+    'usd_buy'       : u'USD покупка',
+    'usd_sell'      : u'USD продажа',
+    'eur_buy'       : u'EUR покупка',
+    'eur_sell'      : u'EUR продажа',
+    'memchache_link': u'127.0.0.1:11211'
 }
 
 url_bank_info = {
-    'http://www.nskbl.ru' : u'Левобережный. Совпаршкольный 13. 900-410. 09.00-20.00',
-    'http://novosibirs.pkb.ru/work/informer/currency.asp?87971' : u'Левобережный. Совпаршкольный 13. 900-410. 09.00-20.00',
-    'http://www.rshb.ru/filiali/55/currency-rates.php' : u'Россельхоз МосковТракт,д.8б 20-22-24',
-    'http://www.skbbank.ru': u'СКБ Томск, пр. Ленина,94 51-18-49',
-    'http://tomsk.rostbank.ru/offices' : u'РОСТ_БАНК ул.Дзержинского,54а 70-50-51',
-    'http://www.bank-kansky.ru': u'Канский пр. Кирова, 35 55-50-90',
-    'https://direct.binbank.ru/api/rate.php?city=Томск&callback=?': u'БинБанк Кирова,3Б 56-40-37'
+    'http://www.nskbl.ru'                                           : u'Левобережный. Совпаршкольный 13. 900-410. 09.00-20.00',
+    'http://novosibirs.pkb.ru/work/informer/currency.asp?87971'     : u'Петрокомерц. Трифонова,22 51-27-60. 10.00-17.00',
+    'http://www.rshb.ru/filiali/55/currency-rates.php'              : u'Россельхоз. МосковТракт,д.8б 20-22-24. 09.00-19.30',
+    'http://www.skbbank.ru'                                         : u'СКБ Томск, пр. Ленина,94. 51-18-49. 09.00-20.00',
+    'http://tomsk.rostbank.ru/offices'                              : u'РОСТ_БАНК ул.Дзержинского,54а. 70-50-51. 09:30 - 19:00',
+    'http://www.bank-kansky.ru'                                     : u'Канский пр. Кирова, 35 55-50-90',
+    'https://direct.binbank.ru/api/rate.php?city=Томск&callback=?'  : u'БинБанк Кирова,3Б 56-40-37'
 }
 
-banks_info = [
+parse_params = [
     {
         'url'                   :'http://www.nskbl.ru',
-        'name'					: u'Левобережный',
-        'address'				: u'Совпаршкольный 13',
-        'phone'					: '900-410',
-        'work_time'				: '09.00-20.00',
         'usd_ankor'				: u'<td>Доллар США</td>',
         'usd_buy_offset'        : 157,
         'usd_sell_offset'       : 274,
@@ -38,10 +35,6 @@ banks_info = [
     },
     {
         'url'                   :'http://novosibirs.pkb.ru/work/informer/currency.asp?87971',
-        'name'					: u'Петрокомерц',
-        'address'				: u'Трифонова,22',
-        'phone'					: '51-27-60',
-        'work_time'				: '10.00 - 17.00',
         'usd_ankor'				: u'USD',
         'usd_buy_offset'        : 44,
         'usd_sell_offset'       : 92,
@@ -53,10 +46,6 @@ banks_info = [
     },
     {
         'url'                   : 'http://www.rshb.ru/filiali/55/currency-rates.php',
-        'name'					: u'Россельхоз',
-        'address'				: u'МосковТракт,д.8б',
-        'phone'					: '20-22-24',
-        'work_time'				: '09.00-19.30',
         'usd_ankor'				: u'Доллар США',
         'usd_buy_offset'        : 24,
         'usd_sell_offset'       : 43,
@@ -68,10 +57,6 @@ banks_info = [
     },
     {
         'url'                   : 'http://www.skbbank.ru',
-        'name'					: u'СКБ',
-        'address'				: u'Томск, пр. Ленина,94',
-        'phone'					: '51-18-49',
-        'work_time'				: '09.00-20.00',
         'usd_ankor'				: u'td',
         'usd_buy_offset'        : 'val_0',
         'usd_sell_offset'       : 'val_1',
@@ -84,10 +69,6 @@ banks_info = [
     },
     {
         'url'                   : 'http://tomsk.rostbank.ru/offices',
-        'name'					: u'РОСТ_БАНК',
-        'address'				: u'ул.Дзержинского,54а',
-        'phone'					: '70-50-51',
-        'work_time'				: '09:30 - 19:00',
         'usd_ankor'				: u'USD',
         'usd_buy_offset'        : 12,
         'usd_sell_offset'       : 26,

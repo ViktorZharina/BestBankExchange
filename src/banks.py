@@ -1,5 +1,7 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
+# @author Viktor Zharina <viktorz1986@gmail.com>
+# CC-BY-SA License
 
 settings = {
     'currencys'     : ['usd', 'eur'],
@@ -7,8 +9,7 @@ settings = {
     'usd_buy'       : u'USD покупка',
     'usd_sell'      : u'USD продажа',
     'eur_buy'       : u'EUR покупка',
-    'eur_sell'      : u'EUR продажа',
-    'memchache_link': u'127.0.0.1:11211'
+    'eur_sell'      : u'EUR продажа'
 }
 
 url_bank_info = [ u'Левобережный. Совпаршкольный 13. 900-410. 09.00-20.00',

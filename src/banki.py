@@ -29,22 +29,22 @@ getcontext().prec = 4
 
 
 def main():
-    bank_rate = get_exchange_rate(parse_params, settings)
+    #bank_rate = get_exchange_rate(parse_params, settings)
+    #print bank_rate
     #add_to_mysql(bank_rate)
-    add_to_memcache(bank_rate)
+    bank_rate2 = {}
+    add_to_memcache(bank_rate2)
     #print (get_currency_table(bank_rate))
 
-def add_to_memcache(bank_rate):
+def add_to_memcache(bank_rate2):
+    bank_rate = {'1': {'eur_buy': u'43.51', 'eur_sell': u'44.51', 'usd_buy': u'32.80', 'usd_sell': u'33.70'}, '0': {'eur_buy': u'43.84', 'eur_sell': u'44.33', 'usd_buy': u'33.24', 'usd_sell': u'33.51'}, '3': {'eur_buy': u'43.86', 'eur_sell': u'44.19', 'usd_buy': u'33.21', 'usd_sell': u'33.49'}, '2': {'eur_buy': u'43.85', 'eur_sell': u'44.12', 'usd_buy': u'33.18', 'usd_sell': u'33.38'}, '5': {'eur_buy': u'43.70', 'eur_sell': u'44.45', 'usd_buy': u'33.10', 'usd_sell': u'33.75'}, '4': {'eur_buy': u'43.97', 'eur_sell': u'44.54', 'usd_buy': u'33.27', 'usd_sell': u'33.47'}, '6': {'eur_buy': '43.83', 'eur_sell': '44.23', 'usd_buy': '33.2', 'usd_sell': '33.52'}}
     mc = memcache.Client(['127.0.0.1:11211'], debug=1)
     mc.set('syn', 1)
 
-    for bank_url, exchange_rate in bank_rate.items():
-        mc.set(bank_url.encode('utf-8'), exchange_rate)
-
-
+    for bank_id, exchange_rate in bank_rate.items():
+        mc.set(bank_id, json.dumps(exchange_rate))
     mc.set('syn', 0)
 
-    mc.get('http://www.nskbl.ru')
     return 1
 
 def add_to_mysql(bank_rate):
@@ -75,7 +75,7 @@ def get_exchange_rate(parse_params, settings):
         for c in settings['currencys']:
             for op in settings['operations']:
                 exchange_rate[c +"_" + op] = get_currency_value(c, op, source, bank)
-                bank_rate[url_bank_info[bank['url']]] = exchange_rate
+                bank_rate[bank['id']] = exchange_rate
 
     return bank_rate
 

@@ -25,11 +25,10 @@ class IndexHandler(tornado.web.RequestHandler):
         self.write(table)
 
     def get_table(self, ex_rates):
-        #print ex_rates, type(ex_rates)
         bank = BankBase(ex_rates)
         all_best_values = bank.get_all_best_values()
 
-        table = u"""<table><tr><td>Банк</td><td colspan=2 align="center">USD</td><td colspan=2 align="center">EUR</td></tr>
+        table = u"""<table width=100%><tr><td>Банк</td><td colspan=2 align="center">USD</td><td colspan=2 align="center">EUR</td></tr>
                     <tr><td></td><td>Покупка</td><td>Продажа</td><td>Покупка</td><td>Продажа</td></tr>"""
 
         for bank_id, v in ex_rates.items():

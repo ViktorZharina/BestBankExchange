@@ -19,7 +19,7 @@ class McBase():
         self.hostname = "%s:%s" % (hostname, port)
         self.server   = memcache.Client([self.hostname])
 
-    def set(self, key, value, expiry=900):
+    def set(self, key, value, expiry=1800):
         """
         This method is used to set a new value
         in the memcache server.

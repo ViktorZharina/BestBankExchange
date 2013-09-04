@@ -32,9 +32,8 @@ getcontext().prec = 4
 def main():
     #bank_rate = get_exchange_rate(parse_params, settings)
     bank_rate = {'1': {'eur_buy': u'43.46', 'eur_sell': u'44.46', 'usd_buy': u'32.80', 'usd_sell': u'33.70'}, '0': {'eur_buy': u'43.79', 'eur_sell': u'44.23', 'usd_buy': u'33.24', 'usd_sell': u'33.49'}, '3': {'eur_buy': u'43.86', 'eur_sell': u'44.19', 'usd_buy': u'33.21', 'usd_sell': u'33.49'}, '2': {'eur_buy': u'43.91', 'eur_sell': u'44.18', 'usd_buy': u'33.23', 'usd_sell': u'33.43'}, '5': {'eur_buy': u'43.70', 'eur_sell': u'44.45', 'usd_buy': u'33.10', 'usd_sell': u'33.75'}, '4': {'eur_buy': u'43.70', 'eur_sell': u'44.24', 'usd_buy': u'33.00', 'usd_sell': u'33.44'}, '6': {'eur_buy': '43.8', 'eur_sell': '44.21', 'usd_buy': '33.24', 'usd_sell': '33.55'}}
-    b = BankBase()
-
-
+    b = BankBase(bank_rate)
+    print b.get_bank_for_exchange()
     #add_to_mysql(bank_rate)
     #bank_rate2 = {}
     #add_to_memcache(bank_rate)
@@ -141,6 +140,16 @@ def get_currency_value(cur, ttype, src, params):
 #    r =  b.get_all_values('usd', 'sell', bank_rate)
 #    print b.get_best_value('usd', 'sell', r)
 
+#    bank_id = b.get_bank_by_value('44.46', bank_rate)
+#    print bank_id
+#    if str(bank_id) in bank_rate.keys():
+#        print url_bank_info[bank_id].encode('utf-8')
+
+
+#    bank_id = b.get_bank_by_value('44.46', bank_rate)
+#
+#    if bank_id in bank_rate.keys():
+#        print url_bank_info[int(bank_id)].encode('utf-8')
 
 if __name__ == "__main__":
     main()

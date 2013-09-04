@@ -4,7 +4,7 @@
 # CC-BY-SA License
 
 import urllib2
-from banks import *
+from config import *
 import json
 from bs4 import BeautifulSoup
 import MySQLdb
@@ -32,23 +32,17 @@ getcontext().prec = 4
 def main():
     #bank_rate = get_exchange_rate(parse_params, settings)
     bank_rate = {'1': {'eur_buy': u'43.46', 'eur_sell': u'44.46', 'usd_buy': u'32.80', 'usd_sell': u'33.70'}, '0': {'eur_buy': u'43.79', 'eur_sell': u'44.23', 'usd_buy': u'33.24', 'usd_sell': u'33.49'}, '3': {'eur_buy': u'43.86', 'eur_sell': u'44.19', 'usd_buy': u'33.21', 'usd_sell': u'33.49'}, '2': {'eur_buy': u'43.91', 'eur_sell': u'44.18', 'usd_buy': u'33.23', 'usd_sell': u'33.43'}, '5': {'eur_buy': u'43.70', 'eur_sell': u'44.45', 'usd_buy': u'33.10', 'usd_sell': u'33.75'}, '4': {'eur_buy': u'43.70', 'eur_sell': u'44.24', 'usd_buy': u'33.00', 'usd_sell': u'33.44'}, '6': {'eur_buy': '43.8', 'eur_sell': '44.21', 'usd_buy': '33.24', 'usd_sell': '33.55'}}
-    b = BankBase(bank_rate)
-    print b.get_bank_for_exchange()
-    #add_to_mysql(bank_rate)
-    #bank_rate2 = {}
-    #add_to_memcache(bank_rate)
+
+    add_to_memcache(bank_rate)
     #print (get_currency_table(bank_rate))
 
 def add_to_memcache(bank_rate):
     mc = McBase()
-    mc.set('syn', 1)
 
     for bank_id, exchange_rate in bank_rate.items():
         mc.set(bank_id, json.dumps(exchange_rate))
 
-    mc.set('syn', 0)
-    #print mc.get('0')
-    return 1
+    return
 
 def add_to_mysql(bank_rate):
     #db = MysqlBase
@@ -83,17 +77,17 @@ def get_exchange_rate(parse_params, settings):
 
     return bank_rate
 
-#def get_currency_table(bank_rate):
-#    s = ""
-#    table = ""
-#    for info in bank_rate.keys():
-#        for k,v in bank_rate[info].items():
-#            s += "\t " + k + " " + v + " | "
-#        table += info + s + '\n' + 150 * "=" + '\n'
-#        info = ""
-#        s = ""
-#
-#    return table.encode('utf-8')
+def get_currency_table(bank_rate):
+    s = ""
+    table = ""
+    for info in bank_rate.keys():
+        for k,v in bank_rate[info].items():
+            s += "\t " + k + " " + v + " | "
+        table += info + s + '\n' + 150 * "=" + '\n'
+        info = ""
+        s = ""
+
+    return table.encode('utf-8')
 
 def get_source(url, encoding):
     try:

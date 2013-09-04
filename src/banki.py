@@ -9,6 +9,7 @@ import json
 from bs4 import BeautifulSoup
 import MySQLdb
 from McBase import McBase
+from BankBase import BankBase
 from decimal import *
 
 getcontext().prec = 4
@@ -29,11 +30,14 @@ getcontext().prec = 4
 
 
 def main():
-    bank_rate = get_exchange_rate(parse_params, settings)
-    #print bank_rate
+    #bank_rate = get_exchange_rate(parse_params, settings)
+    bank_rate = {'1': {'eur_buy': u'43.46', 'eur_sell': u'44.46', 'usd_buy': u'32.80', 'usd_sell': u'33.70'}, '0': {'eur_buy': u'43.79', 'eur_sell': u'44.23', 'usd_buy': u'33.24', 'usd_sell': u'33.49'}, '3': {'eur_buy': u'43.86', 'eur_sell': u'44.19', 'usd_buy': u'33.21', 'usd_sell': u'33.49'}, '2': {'eur_buy': u'43.91', 'eur_sell': u'44.18', 'usd_buy': u'33.23', 'usd_sell': u'33.43'}, '5': {'eur_buy': u'43.70', 'eur_sell': u'44.45', 'usd_buy': u'33.10', 'usd_sell': u'33.75'}, '4': {'eur_buy': u'43.70', 'eur_sell': u'44.24', 'usd_buy': u'33.00', 'usd_sell': u'33.44'}, '6': {'eur_buy': '43.8', 'eur_sell': '44.21', 'usd_buy': '33.24', 'usd_sell': '33.55'}}
+    b = BankBase()
+
+
     #add_to_mysql(bank_rate)
-    bank_rate2 = {}
-    add_to_memcache(bank_rate)
+    #bank_rate2 = {}
+    #add_to_memcache(bank_rate)
     #print (get_currency_table(bank_rate))
 
 def add_to_memcache(bank_rate):
@@ -80,33 +84,17 @@ def get_exchange_rate(parse_params, settings):
 
     return bank_rate
 
-def get_currency_table(bank_rate):
-    s = ""
-    table = ""
-    for info in bank_rate.keys():
-        for k,v in bank_rate[info].items():
-            s += "\t " + k + " " + v + " | "
-        table += info + s + '\n' + 150 * "=" + '\n'
-        info = ""
-        s = ""
-
-    return table.encode('utf-8')
-
-def get_banks_for_exchange(bank_rate):
-    all_values = {}
-    bank = {}
-
-    for info in bank_rate:
-        for cur_op_name, val in bank_rate[info].items():
-            if cur_op_name in all_values.keys():
-                all_values[cur_op_name].append(val)
-                bank[val] = info
-            else:
-                all_values[cur_op_name] = [val]
-                bank[val] = info
-
-    best_values = get_best_values(all_values)
-    return get_banks_by_best_values(best_values, bank)
+#def get_currency_table(bank_rate):
+#    s = ""
+#    table = ""
+#    for info in bank_rate.keys():
+#        for k,v in bank_rate[info].items():
+#            s += "\t " + k + " " + v + " | "
+#        table += info + s + '\n' + 150 * "=" + '\n'
+#        info = ""
+#        s = ""
+#
+#    return table.encode('utf-8')
 
 def get_source(url, encoding):
     try:
@@ -143,25 +131,16 @@ def get_currency_value(cur, ttype, src, params):
 
     return currency_value.replace(',', '.')
 
-def get_best_values(all_values):
-    best_values = {}
+# test
+#    bank_rate = {'1': {'eur_buy': u'43.46', 'eur_sell': u'44.46', 'usd_buy': u'32.80', 'usd_sell': u'33.70'}, '0': {'eur_buy': u'43.79', 'eur_sell': u'44.23', 'usd_buy': u'33.24', 'usd_sell': u'33.49'}, '3': {'eur_buy': u'43.86', 'eur_sell': u'44.19', 'usd_buy': u'33.21', 'usd_sell': u'33.49'}, '2': {'eur_buy': u'43.91', 'eur_sell': u'44.18', 'usd_buy': u'33.23', 'usd_sell': u'33.43'}, '5': {'eur_buy': u'43.70', 'eur_sell': u'44.45', 'usd_buy': u'33.10', 'usd_sell': u'33.75'}, '4': {'eur_buy': u'43.70', 'eur_sell': u'44.24', 'usd_buy': u'33.00', 'usd_sell': u'33.44'}, '6': {'eur_buy': '43.8', 'eur_sell': '44.21', 'usd_buy': '33.24', 'usd_sell': '33.55'}}
+#    b = BankBase()
+#    r =  b.get_all_values('usd', 'buy', bank_rate)
+#    print r
+#    print b.get_best_value('usd', 'buy', r)
+#
+#    r =  b.get_all_values('usd', 'sell', bank_rate)
+#    print b.get_best_value('usd', 'sell', r)
 
-    for cur_op, value_list in all_values.items():
-        best_values[cur_op] = max(value_list) if (cur_op[4:] == 'buy') else min(value_list)
-
-    return best_values
-
-def get_banks_by_best_values(best_values, bank):
-
-    banks = {'Not at this time' : 'see ya...'}
-
-    if (best_values['usd_buy'] > best_values['usd_sell']):
-        banks['USD GO GO GO !!!'] = {'from': bank[best_values['usd_buy']], 'to': bank[best_values['usd_sell']]}
-
-    if (best_values['eur_buy'] > best_values['eur_sell']):
-        banks['EUR GO GO GO !!!'] = {'from': bank[best_values['eur_buy']], 'to': bank[best_values['eur_sell']]}
-
-    return banks
 
 if __name__ == "__main__":
     main()

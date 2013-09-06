@@ -20,15 +20,19 @@ class IndexHandler(tornado.web.RequestHandler):
         ex_rates = {}
 
         for x in xrange(len(url_bank_info)):
-            ex_rates[x] = json.loads(mc.get(str(x)))
+            data = mc.get(str(x))
+            if data:
+                ex_rates[x] = json.loads(data)
 
         bank = BankBase(ex_rates)
+
         loader = tornado.template.Loader("templates")
 
         template = loader.load("index.html").generate(bank=bank,
             ex_rates=ex_rates,
             best_values = bank.get_all_best_values(),
-            bank_info = url_bank_info)
+            bank_info = url_bank_info,
+            bank_for_exchange = bank.get_bank_for_exchange())
 
         self.write(template)
 

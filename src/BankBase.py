@@ -21,7 +21,10 @@ class BankBase():
 
     """Метод возвращает лучшую цену по заданной операции из переданных значений"""
     def get_best_value(self, operation, values):
-        return max(values) if operation == 'buy' else min(values)
+        if (values):
+            return max(values) if operation == 'buy' else min(values)
+        return 0
+
 
     def get_all_best_values(self):
         v = []
@@ -49,10 +52,8 @@ class BankBase():
         for cur in settings['currencys']:
             best_buy = self.get_best_value('buy', self.get_all_values(cur, 'buy'))
             best_sell = self.get_best_value('sell', self.get_all_values(cur, 'sell'))
-
-            if best_buy > best_sell:
-                bank['from_' + cur] = best_buy
-                bank['to_' + cur] = best_sell
+            bank['from_' + cur] = best_buy
+            bank['to_' + cur] = best_sell
 
         return bank
 

@@ -40,5 +40,8 @@
         </tbody>
       {% end %}
       </table>
+      {% if bank['from_usd'] > bank['to_usd'] %}
+        <p> {{ bank }} - {{ value }} </p>
+      {% end %}
   </body>
 </html>

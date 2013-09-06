@@ -40,8 +40,12 @@
         </tbody>
       {% end %}
       </table>
-      {% if bank['from_usd'] > bank['to_usd'] %}
-        <p> {{ bank }} - {{ value }} </p>
+      {% if bank_for_exchange['from_usd'] > bank_for_exchange['to_usd'] %}
+        <p>Срочно меняем рубли на доллары!!!</p>
+      {% end %}
+
+      {% if bank_for_exchange['from_eur'] > bank_for_exchange['to_eur'] %}
+        <p>Срочно меняем рубли на евро!!!</p>
       {% end %}
   </body>
 </html>

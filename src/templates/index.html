@@ -16,36 +16,41 @@
       {% for bank_id, v in ex_rates.items() %}
         <tbody>
         <tr>
+
         <td>{{ bank_info[bank_id] }}</td>
+
         {% if v['usd_buy'] in best_values %}
-        <td><b>{{v['usd_buy']}}</b></td>
+            <td><b>{{ v['usd_buy'] }}</b></td>
         {% else %}
-        <td> {{ v['usd_buy'] }} </td>
+            <td>{{ v['usd_buy'] }}</td>
         {% end %}
+
         {% if v['usd_sell'] in best_values %}
-        <td><b> {{v['usd_sell']}}</b></td>
+            <td><b>{{ v['usd_sell'] }} </b></td>
         {% else %}
-        <td>{{ v['usd_sell'] }}</td>
+            <td>{{ v['usd_sell'] }}</td>
         {% end %}
+
         {% if v['eur_buy'] in best_values %}
-        <td><b>{{v['eur_buy']}}</b></td>
+            <td><b>{{ v['eur_buy'] }}</b></td>
         {% else %}
-        <td> {{v['eur_buy']}} </td>
+            <td> {{ v['eur_buy'] }} </td>
         {% end %}
+
         {% if v['eur_sell'] in best_values %}
-        <td><b> {{ v['eur_sell'] }} </b></td>
+            <td><b> {{ v['eur_sell'] }} </b></td>
         {% else %}
-        <td> {{ v['eur_sell'] }} </td>
+            <td> {{ v['eur_sell'] }} </td>
         {% end %}
         </tbody>
       {% end %}
-      </table>
-      {% if bank_for_exchange['from_usd'] > bank_for_exchange['to_usd'] %}
+    </table>
+    {% if bank_for_exchange['from_usd'] > bank_for_exchange['to_usd'] %}
         <p>Срочно меняем рубли на доллары!!!</p>
-      {% end %}
+    {% end %}
 
-      {% if bank_for_exchange['from_eur'] > bank_for_exchange['to_eur'] %}
-        <p>Срочно меняем рубли на евро!!!</p>
-      {% end %}
+    {% if bank_for_exchange['from_eur'] > bank_for_exchange['to_eur'] %}
+      <p>Срочно меняем рубли на евро!!!</p>
+    {% end %}
   </body>
 </html>

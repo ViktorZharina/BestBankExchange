@@ -10,23 +10,31 @@ Banks class
 Класс для работы с обменными курсами
 """
 class BankBase():
+    """ курсы валют """
     exchange_rates = {}
 
     def __init__(self, exchange_rates):
         self.exchange_rates = exchange_rates
 
-    """exchange_rates = {'bank_id': {'currency_operation': u'value',}}"""
     def get_all_values(self, currency, operation):
+        """
+        Метод возвращает все значения по валютам и типам операций. Пример:
+        exchange_rates = {'bank_id': {'currency_operation': u'value',}}
+        """
         return [val[currency+'_'+operation] for val in self.exchange_rates.values() if currency+'_'+operation in val.keys()]
 
-    """Метод возвращает лучшую цену по заданной операции из переданных значений"""
     def get_best_value(self, operation, values):
+        """
+        Метод возвращает лучшую цену по заданной операции из переданных значений values
+        """
         if (values):
             return max(values) if operation == 'buy' else min(values)
         return 0
 
-
     def get_all_best_values(self):
+        """
+        Метод возвращает список лучших курсов (макс. покупку и мин продажу)
+        """
         v = []
 
         for cur in settings['currencys']:
@@ -37,16 +45,25 @@ class BankBase():
         return v
 
     def is_best_value(self, value, currency, operation):
+        """
+        Метод проверяет является ли значение курса лучшим
+        """
         all_val = get_all_values(currency, operation)
         best_val = self.get_best_value(operation, all_val)
 
         return True if (value == best_val) else False
 
     def get_bank_by_value(self, value):
+        """
+        Метод возвращает ид банка по значению курса
+        """
         for bank_id, val in self.exchange_rates.items():
             return bank_id if value in val.values() else '0'
 
     def get_bank_for_exchange(self):
+        """
+        Метод возвращает словарь 
+        """
         bank = {}
 
         for cur in settings['currencys']:

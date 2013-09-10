@@ -40,9 +40,6 @@ class McBase():
         """
         self.server.delete(key)
 
-    def get_multi(self, keys):
-        return self.server.get_multi(keys)
-
 if __name__ == '__main__':
     sample = Example("127.0.0.1");
     sample.set("name", "david");

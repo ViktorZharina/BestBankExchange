@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <title>{% block title %}BestBankExchange{% end %}</title>
+  </head>
+  <body>
+    <table width=100%>
+      <tr>
+        <td>Банк</td>
+        <td colspan=2 align="center">USD</td> <td colspan=2 align="center">EUR</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>Покупка</td><td>Продажа</td><td>Покупка</td><td>Продажа</td>
+      </tr>
+
+      {% for bank_id, v in ex_rates.items() %}
+        <tbody>
+        <tr>
+        <td>{{ bank_info[bank_id] }}</td>
+        {% if v['usd_buy'] in best_values %}
+        <td><b>{{v['usd_buy']}}</b></td>
+        {% else %}
+        <td> {{ v['usd_buy'] }} </td>
+        {% end %}
+        {% if v['usd_sell'] in best_values %}
+        <td><b> {{v['usd_sell']}}</b></td>
+        {% else %}
+        <td>{{ v['usd_sell'] }}</td>
+        {% end %}
+        {% if v['eur_buy'] in best_values %}
+        <td><b>{{v['eur_buy']}}</b></td>
+        {% else %}
+        <td> {{v['eur_buy']}} </td>
+        {% end %}
+        {% if v['eur_sell'] in best_values %}
+        <td><b> {{ v['eur_sell'] }} </b></td>
+        {% else %}
+        <td> {{ v['eur_sell'] }} </td>
+        {% end %}
+        </tbody>
+      {% end %}
+      </table>
+  </body>
+</html>
